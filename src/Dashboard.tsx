@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BadgeCheck, ChevronLeft, ChevronRight, Search, ClipboardCheck, X } from "lucide-react";
+import { BadgeCheck, ChevronLeft, ChevronRight, Search, ClipboardCheck, X, Coins } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import { searchCompanies } from "./lib/api/searchCompanies";
 import { getMetadata, type Metadata } from "./lib/api/getMetadata";
+import { ApiAuthError, ApiError } from "./lib/api/apiFetch";
 import { Spinner } from "./components/ui/spinner";
 
 function App() {
@@ -20,16 +21,29 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
 
+    const navigate = useNavigate();
+
+    function handleApiAuthError(error: unknown): boolean {
+        if (error instanceof ApiAuthError) {
+            toast.error("Sessão expirada, por favor login novamente");
+            navigate("/");
+            return true;
+        }
+        return false;
+    }
+
     async function fetchMetadata() {
-        const data = await getMetadata()
-        setMetadata(data);
+        try {
+            setMetadata(await getMetadata());
+        } catch (error) {
+            if (handleApiAuthError(error)) return;
+            console.error(error);
+        }
     }
 
     useEffect(() => {
         fetchMetadata();
     }, []);
-
-    const navigate = useNavigate();
 
     async function fetchResults(page: number) {
         if (!query.trim()) return;
@@ -37,27 +51,26 @@ function App() {
         setSearchPerformed(true);
         setLoading(true);
 
-        const response = await searchCompanies(query, page);
-        if(!response.ok) {
-            if([401,403].includes(response.status)) {
-                toast.error("Sessão expirada, por favor login novamente");
-                navigate("/");
-            } else {
-                toast.error("Erro ao procurar empresas");
-                console.error({
-                    statusText: response.statusText,
-                    status: response.status
-                });
-            }
-            setLoading(false);
-            return;
-        }
-        const data = await response.json();
+        try {
+            const data = await searchCompanies(query, page);
+            setItems(data.items);
+            setCurrentPage(data.page);
+            setNrPages(data.nrPages);
+        } catch (error) {
+            if (handleApiAuthError(error)) return;
 
-        setItems(data.items);
-        setCurrentPage(data.page);
-        setNrPages(data.nrPages);
-        setLoading(false);
+            toast.error("Erro ao procurar empresas");
+            if (error instanceof ApiError) {
+                console.error({
+                    statusText: error.response.statusText,
+                    status: error.response.status,
+                });
+            } else {
+                console.error(error);
+            }
+        } finally {
+            setLoading(false);
+        }
     }
 
     async function handleSearch() {
@@ -94,15 +107,35 @@ function App() {
                 </h1>
 
                 {metadata && (
-                    <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                        <Badge variant="secondary">
-                            <BadgeCheck />
-                            {metadata.companiesTable.itemCount} empresas
-                        </Badge>
-                        <Badge variant="secondary">
-                            <ClipboardCheck />
-                            {metadata.unprocessedCompaniesTable.itemCount} empresas por processar
-                        </Badge>
+                    <div className="mt-4 flex flex-col items-center gap-2">
+                        <div className="flex flex-wrap items-center justify-center gap-2">
+                            <Badge variant="secondary">
+                                <BadgeCheck />
+                                {metadata.companiesTable.itemCount} empresas
+                            </Badge>
+                            <Badge variant="secondary">
+                                <ClipboardCheck />
+                                {metadata.unprocessedCompaniesTable.itemCount} empresas por processar
+                            </Badge>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-2">
+                            <Badge variant="outline">
+                                <Coins />
+                                Mês: {metadata.nifPt.credits.month}
+                            </Badge>
+                            <Badge variant="outline">
+                                <Coins />
+                                Dia: {metadata.nifPt.credits.day}
+                            </Badge>
+                            <Badge variant="outline">
+                                <Coins />
+                                Hora: {metadata.nifPt.credits.hour}
+                            </Badge>
+                            <Badge variant="outline">
+                                <Coins />
+                                Minuto: {metadata.nifPt.credits.minute}
+                            </Badge>
+                        </div>
                     </div>
                 )}
 
@@ -139,13 +172,6 @@ function App() {
                         Procurar
                     </Button>
                 </div>
-                {loading && (
-                    <div className="mt-8 flex flex-col gap-2">
-                        <p className="text-sm text-muted-foreground">
-                            A procurar empresas...
-                        </p>
-                    </div>
-                )}
 
                 {!loading && items.length > 0 && (
                     <div className="mt-8 flex flex-col gap-2">
@@ -188,6 +214,11 @@ function App() {
                 )}
                 {!loading && items.length === 0 && searchPerformed && (
                     <div className="mt-8 flex flex-col gap-2">
+                        Não foram encontradas empresas com o NIF fornecido
+                    </div>
+                )}
+                {loading && (
+                    <div className="mt-8 flex flex-col gap-2">
                         <Item variant="muted">
                             <ItemMedia>
                                 <Spinner />
@@ -195,7 +226,6 @@ function App() {
                             <ItemContent>
                                 <ItemTitle className="line-clamp-1">A procurar empresas...</ItemTitle>
                             </ItemContent>
-                            
                         </Item>
                     </div>
                 )}

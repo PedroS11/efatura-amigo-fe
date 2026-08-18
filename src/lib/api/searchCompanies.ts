@@ -1,8 +1,16 @@
-export const searchCompanies = async (query: string, page: number) => {
-    const response = await fetch(`https://efatura.pedroosilva.dev/api/search?query=${query}&page=${page}`, {
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("idToken")}`
-        }
-    });
-    return response;
-}
+import { apiFetchJson } from "./apiFetch";
+
+export type SearchCompaniesResponse = {
+    items: Array<{
+        nif: number;
+        name: string;
+        category?: string;
+    }>;
+    page: number;
+    nrPages: number;
+};
+
+export const searchCompanies = (query: string, page: number) =>
+    apiFetchJson<SearchCompaniesResponse>(
+        `/api/search?query=${encodeURIComponent(query)}&page=${page}`
+    );
