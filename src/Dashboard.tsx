@@ -18,6 +18,7 @@ function App() {
     const [currentPage, setCurrentPage] = useState(0);
     const [nrPages, setNrPages] = useState(0);
     const [metadata, setMetadata] = useState<Metadata | null>(null);
+    const [metadataLoading, setMetadataLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
 
@@ -33,11 +34,14 @@ function App() {
     }
 
     async function fetchMetadata() {
+        setMetadataLoading(true);
         try {
             setMetadata(await getMetadata());
         } catch (error) {
             if (handleApiAuthError(error)) return;
             console.error(error);
+        } finally {
+            setMetadataLoading(false);
         }
     }
 
@@ -105,6 +109,12 @@ function App() {
                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
                     Efatura Amigo Dashboard
                 </h1>
+
+                {metadataLoading && (
+                    <div className="mt-4 flex justify-center">
+                        <Spinner className="size-6 text-muted-foreground" />
+                    </div>
+                )}
 
                 {metadata && (
                     <div className="mt-4 flex flex-col items-center gap-2">
