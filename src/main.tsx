@@ -3,9 +3,9 @@ import ReactDOM from "react-dom/client";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Login from "./Login.tsx";
 import "./index.css";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard.tsx";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 

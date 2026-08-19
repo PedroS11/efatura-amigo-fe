@@ -10,9 +10,8 @@ export type Metadata = {
             hour: number;
             minute: number;
             paid: number;
-        }
-    }
+        };
+    };
 };
 
-export const getMetadata = () =>
-    apiFetchJson<Metadata>("/api/metadata");
+export const getMetadata = () => apiFetchJson<Metadata>("/api/metadata");
