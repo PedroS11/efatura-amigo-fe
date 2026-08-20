@@ -105,7 +105,18 @@ Deployed via **Cloudflare Workers CI/CD** (Git integration). One worker serves t
 | Route | Behavior |
 | --- | --- |
 | `x.dev/` | React dashboard (SPA) |
-| `x.dev/api/*` | Proxied to `EFATURA_API_BASE_URL` |
+| `x.dev/api/*` | Proxied to `EFATURA_API_BASE_URL` (rate-limited at the Worker) |
+
+### API rate limits (Worker)
+
+Requests blocked at the Worker return **429** and never reach AWS (no API Gateway / Lambda cost).
+
+| Path | Limit | Purpose |
+| --- | --- | --- |
+| `/api/me` | 5 / minute per IP | Session validation / login abuse |
+| All other `/api/*` | 10 / minute per IP | Stay within AWS free-tier ceiling (~1M req/month) |
+
+Limits are per Cloudflare edge location (PoP), not global. Configured in `wrangler.toml` via `[[ratelimits]]` bindings.
 
 ### One-time setup in the Cloudflare dashboard
 

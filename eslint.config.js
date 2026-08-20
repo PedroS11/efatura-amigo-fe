@@ -11,7 +11,23 @@ import { defineConfig, globalIgnores } from "eslint/config";
 export default defineConfig([
     globalIgnores(["dist"]),
     {
+        files: ["worker/**/*.ts"],
+        extends: [
+            js.configs.recommended,
+            tseslint.configs.recommended,
+            eslintPluginPrettierRecommended,
+        ],
+        languageOptions: {
+            globals: globals.worker,
+            parserOptions: {
+                project: ["./tsconfig.worker.json"],
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
+    {
         files: ["**/*.{ts,tsx}"],
+        ignores: ["worker/**"],
         extends: [
             js.configs.recommended,
             tseslint.configs.recommended,
