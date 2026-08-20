@@ -1,6 +1,7 @@
 name = "efatura-amigo-fe"
 main = "worker/index.js"
 compatibility_date = "2024-08-20"
+keep_vars = true
 
 [assets]
 directory = "./dist"

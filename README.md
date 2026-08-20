@@ -118,7 +118,11 @@ Connect this repo under **Workers & Pages → Create → Connect to Git**, then 
 | **Build** variable `VITE_API_URL` | *(leave empty)* |
 | **Worker** variable `EFATURA_API_BASE_URL` | Your API gateway URL (e.g. `https://api.example.com`) |
 
-`EFATURA_API_BASE_URL` must be a **Worker** (runtime) variable under **Settings → Variables and Secrets**, not a build variable. If it is missing, `/api/*` requests fail.
+Set `EFATURA_API_BASE_URL` as a **plain text Worker variable** under **Settings → Variables and Secrets** (not a build variable). Plain text is fine — it is just a URL, not a credential.
+
+`wrangler.toml` sets `keep_vars = true` so CI deploys do not delete dashboard Worker variables. Without this, `npx wrangler deploy` treats the repo config as source of truth and removes vars that exist only in the dashboard.
+
+After adding the variable, push this change (or retry the latest deployment), then set `EFATURA_API_BASE_URL` again in the dashboard if a previous deploy already removed it.
 
 Then attach your custom domain under **Settings → Domains & Routes**.
 
