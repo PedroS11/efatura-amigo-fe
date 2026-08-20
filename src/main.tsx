@@ -18,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         path="/dashboard"
                         element={<Navigate to="/" replace />}
                     />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </BrowserRouter>
             <Toaster />
