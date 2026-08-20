@@ -92,10 +92,11 @@ All requests send `Authorization: Bearer <idToken>` using the Google credential 
 
 | Endpoint | Used for |
 | --- | --- |
+| `GET /api/me` | Session validation on load and after login |
 | `GET /api/metadata` | Dashboard stats (company counts, NIF.PT credits) |
 | `GET /api/search?query=&page=` | Paginated company search |
 
-On `401` or `403`, the app shows a session-expired message and redirects to `/`.
+On `401` or `403`, the app shows a session-expired message and returns to the login screen.
 
 ## Deploy to Cloudflare
 

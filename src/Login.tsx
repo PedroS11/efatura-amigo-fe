@@ -1,11 +1,13 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-function CardDemo() {
+type LoginProps = {
+    onLogin: () => void;
+};
+
+function Login({ onLogin }: LoginProps) {
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
 
     return (
         <main className="min-h-screen flex items-center justify-center px-4">
@@ -26,7 +28,7 @@ function CardDemo() {
                                     credentialResponse.credential
                                 );
 
-                                navigate("/dashboard");
+                                onLogin();
                             }
                         }}
                         onError={() => {
@@ -41,4 +43,4 @@ function CardDemo() {
     );
 }
 
-export default CardDemo;
+export default Login;

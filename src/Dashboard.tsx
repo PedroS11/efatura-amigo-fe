@@ -19,7 +19,6 @@ import {
     ItemTitle,
 } from "./components/ui/item";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import {
     searchCompanies,
@@ -29,7 +28,11 @@ import { getMetadata, type Metadata } from "./lib/api/getMetadata";
 import { ApiAuthError, ApiError } from "./lib/api/apiFetch";
 import { Spinner } from "./components/ui/spinner";
 
-function App() {
+type DashboardProps = {
+    onSessionExpired: () => void;
+};
+
+function App({ onSessionExpired }: DashboardProps) {
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<SearchCompaniesResponse["items"]>([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -39,18 +42,16 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
 
-    const navigate = useNavigate();
-
     const handleApiAuthError = useCallback(
         (error: unknown): boolean => {
             if (error instanceof ApiAuthError) {
                 toast.error("Sessão expirada, por favor login novamente");
-                navigate("/");
+                onSessionExpired();
                 return true;
             }
             return false;
         },
-        [navigate]
+        [onSessionExpired]
     );
 
     useEffect(() => {
