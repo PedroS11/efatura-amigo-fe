@@ -31,8 +31,7 @@ export default {
             }
 
             try {
-                const apiPath = url.pathname.replace(/^\/api/, "") || "/";
-                const target = new URL(apiPath + url.search, baseUrl);
+                const target = new URL(url.pathname + url.search, baseUrl);
 
                 return fetch(target, {
                     method: request.method,
