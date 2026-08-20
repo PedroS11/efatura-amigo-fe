@@ -54,24 +54,20 @@ function App() {
     );
 
     useEffect(() => {
-        let cancelled = false;
-
-        void (async () => {
+        async function fetchMetadata() {
             try {
                 const data = await getMetadata();
-                if (!cancelled) setMetadata(data);
+                setMetadata(data);
             } catch (error) {
-                if (cancelled) return;
-                if (handleApiAuthError(error)) return;
+                if (handleApiAuthError(error)) {
+                    return;
+                }
                 console.error(error);
             } finally {
-                if (!cancelled) setMetadataLoading(false);
+                setMetadataLoading(false);
             }
-        })();
-
-        return () => {
-            cancelled = true;
-        };
+        }
+        fetchMetadata();
     }, [handleApiAuthError]);
 
     async function fetchResults(page: number) {
