@@ -114,9 +114,11 @@ Connect this repo under **Workers & Pages → Create → Connect to Git**, then 
 | --- | --- |
 | Build command | `yarn build` |
 | Deploy command | `npx wrangler deploy` |
-| Build variable `VITE_GOOGLE_CLIENT_ID` | Your Google OAuth client ID |
-| Build variable `VITE_API_URL` | *(leave empty)* |
-| Worker variable `EFATURA_API_BASE_URL` | Your API gateway URL (e.g. `https://api.example.com`) |
+| **Build** variable `VITE_GOOGLE_CLIENT_ID` | Your Google OAuth client ID |
+| **Build** variable `VITE_API_URL` | *(leave empty)* |
+| **Worker** variable `EFATURA_API_BASE_URL` | Your API gateway URL (e.g. `https://api.example.com`) |
+
+`EFATURA_API_BASE_URL` must be a **Worker** (runtime) variable under **Settings → Variables and Secrets**, not a build variable. If it is missing, `/api/*` requests fail.
 
 Then attach your custom domain under **Settings → Domains & Routes**.
 
