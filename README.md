@@ -97,14 +97,29 @@ All requests send `Authorization: Bearer <idToken>` using the Google credential 
 
 On `401` or `403`, the app shows a session-expired message and redirects to `/`.
 
-## Build for production
+## Deploy to Cloudflare
 
-```bash
-yarn build
-```
+Deployed via **Cloudflare Workers CI/CD** (Git integration). One worker serves the dashboard and proxies `/api/*` to your API gateway.
 
-Output is written to `dist/`. Serve it with any static host, or preview locally:
+| Route | Behavior |
+| --- | --- |
+| `x.dev/` | React dashboard (SPA) |
+| `x.dev/api/*` | Proxied to `EFATURA_API_BASE_URL` |
 
-```bash
-yarn preview
-```
+### One-time setup in the Cloudflare dashboard
+
+Connect this repo under **Workers & Pages → Create → Connect to Git**, then configure:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `yarn build` |
+| Deploy command | `npx wrangler deploy` |
+| Build variable `VITE_GOOGLE_CLIENT_ID` | Your Google OAuth client ID |
+| Build variable `VITE_API_URL` | *(leave empty)* |
+| Worker variable `EFATURA_API_BASE_URL` | Your API gateway URL (e.g. `https://api.example.com`) |
+
+Then attach your custom domain under **Settings → Domains & Routes**.
+
+Add your production origin (e.g. `https://x.dev`) to authorized JavaScript origins in the [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+
+Pushes to the connected branch deploy automatically.
