@@ -1,6 +1,6 @@
 # Efatura Amigo
 
-Frontend for **Efatura Amigo** — a dashboard to search Portuguese companies by NIF, backed by the [Efatura Amigo API](https://github.com/PedroS11/efatura-amigo-be).
+**Efatura Amigo Dashboard** — a dashboard to search Portuguese companies by NIF, backed by the [Efatura Amigo API](https://github.com/PedroS11/efatura-amigo-be).
 
 ## Features
 
@@ -8,7 +8,8 @@ Frontend for **Efatura Amigo** — a dashboard to search Portuguese companies by
 - **Company search** — look up companies by NIF/name with paginated results
 - **Metadata overview** — indexed company counts, unprocessed queue size, and NIF.PT API credit usage
 
-<img src="./assets/dashboard.png" alt="Dashboard overview" width="50%" />
+
+![Dashboard](./assets/dashboard.png)
 
 ## Tech stack
 
