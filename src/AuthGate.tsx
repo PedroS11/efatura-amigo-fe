@@ -15,13 +15,6 @@ export default function AuthGate() {
     const [authState, setAuthState] = useState<AuthState>("loading");
 
     const validateSession = useCallback(async () => {
-        const token = localStorage.getItem("idToken");
-
-        if (!token) {
-            setAuthState("unauthenticated");
-            return;
-        }
-
         try {
             await getMe();
             setAuthState("authenticated");

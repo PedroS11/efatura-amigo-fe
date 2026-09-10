@@ -11,9 +11,13 @@ interface Env {
     AUTH_RATE_LIMITER: RateLimiter;
 }
 
-const PROXY_HEADERS = ["authorization", "content-type", "accept"];
+const PROXY_HEADERS = ["authorization", "content-type", "accept", "cookie"];
 
-const AUTH_SESSION_PATHS = ["/api/me"];
+const AUTH_SESSION_PATHS = [
+    "/api/auth/me",
+    "/api/auth/login",
+    "/api/auth/logout",
+];
 
 function proxyHeaders(request: Request): Headers {
     const headers = new Headers();

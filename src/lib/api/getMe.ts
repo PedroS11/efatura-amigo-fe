@@ -6,4 +6,4 @@ export type Me = {
     name?: string;
 };
 
-export const getMe = () => apiFetchJson<Me>("/api/me");
+export const getMe = () => apiFetchJson<Me>("/api/auth/me");

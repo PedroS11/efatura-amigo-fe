@@ -6,6 +6,27 @@ type LoginProps = {
     onLogin: () => void;
 };
 
+const login = async (credential: string) => {
+    const response = await fetch(
+        "https://1qwv76yf37.execute-api.eu-west-2.amazonaws.com/api/auth/login",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                credential,
+            }),
+        }
+    );
+
+    if (!response.ok) {
+        console.log("Login failed", response.statusText);
+        return;
+    }
+};
+
 function Login({ onLogin }: LoginProps) {
     const [error, setError] = useState<string | null>(null);
 
@@ -21,13 +42,14 @@ function Login({ onLogin }: LoginProps) {
                     <GoogleLogin
                         use_fedcm_for_button={false}
                         shape="square"
-                        onSuccess={(credentialResponse) => {
+                        onSuccess={async (credentialResponse) => {
+                            console.log("LOGIN cre", credentialResponse);
+
                             if (credentialResponse.credential) {
-                                localStorage.setItem(
-                                    "idToken",
+                                const response = await login(
                                     credentialResponse.credential
                                 );
-
+                                console.log("LOGIN", response);
                                 onLogin();
                             }
                         }}

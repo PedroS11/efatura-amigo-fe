@@ -19,9 +19,7 @@ export class ApiAuthError extends ApiError {
 
 export async function apiFetch(path: string): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("idToken")}`,
-        },
+        credentials: "include",
     });
 
     if ([401, 403].includes(response.status)) {
