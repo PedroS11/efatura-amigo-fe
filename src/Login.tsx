@@ -3,7 +3,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
 type LoginProps = {
-    onLogin: () => void;
+    onLogin: (credential: string) => Promise<void>;
 };
 
 function Login({ onLogin }: LoginProps) {
@@ -21,14 +21,14 @@ function Login({ onLogin }: LoginProps) {
                     <GoogleLogin
                         use_fedcm_for_button={false}
                         shape="square"
-                        onSuccess={(credentialResponse) => {
-                            if (credentialResponse.credential) {
-                                localStorage.setItem(
-                                    "idToken",
-                                    credentialResponse.credential
-                                );
+                        onSuccess={async (credentialResponse) => {
+                            if (!credentialResponse.credential) return;
 
-                                onLogin();
+                            setError(null);
+                            try {
+                                await onLogin(credentialResponse.credential);
+                            } catch {
+                                setError("Login failed");
                             }
                         }}
                         onError={() => {

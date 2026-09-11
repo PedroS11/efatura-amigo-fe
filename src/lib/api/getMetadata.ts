@@ -14,4 +14,4 @@ export type Metadata = {
     };
 };
 
-export const getMetadata = () => apiFetchJson<Metadata>("/api/metadata");
+export const getMetadata = () => apiFetchJson<Metadata>("GET", "/api/metadata");

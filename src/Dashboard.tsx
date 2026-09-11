@@ -20,6 +20,8 @@ import {
 } from "./components/ui/item";
 import { toast } from "sonner";
 import Footer from "./Footer";
+import Header from "./Header";
+import type { User } from "@/lib/api/auth/types.ts";
 import {
     searchCompanies,
     type SearchCompaniesResponse,
@@ -29,10 +31,13 @@ import { ApiAuthError, ApiError } from "./lib/api/apiFetch";
 import { Spinner } from "./components/ui/spinner";
 
 type DashboardProps = {
+    user: User;
+    onLogout: () => void;
+    logoutLoading?: boolean;
     onSessionExpired: () => void;
 };
 
-function App({ onSessionExpired }: DashboardProps) {
+function App({ user, onLogout, logoutLoading, onSessionExpired }: DashboardProps) {
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<SearchCompaniesResponse["items"]>([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -127,6 +132,11 @@ function App({ onSessionExpired }: DashboardProps) {
 
     return (
         <div className="min-h-screen flex flex-col">
+            <Header
+                name={user.name ?? user.email}
+                onLogout={onLogout}
+                logoutLoading={logoutLoading}
+            />
             <main className="flex flex-1 items-center justify-center px-4 py-8">
                 <div className="w-full max-w-2xl text-center">
                     <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">

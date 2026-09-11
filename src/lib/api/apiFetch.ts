@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 export class ApiError extends Error {
     response: Response;
@@ -17,11 +17,16 @@ export class ApiAuthError extends ApiError {
     }
 }
 
-export async function apiFetch(path: string): Promise<Response> {
+export async function apiFetch(
+    method: string,
+    path: string,
+    data?: object
+): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("idToken")}`,
-        },
+        credentials: "include",
+        method,
+        headers: data ? { "Content-Type": "application/json" } : undefined,
+        body: data ? JSON.stringify(data) : undefined,
     });
 
     if ([401, 403].includes(response.status)) {
@@ -35,7 +40,11 @@ export async function apiFetch(path: string): Promise<Response> {
     return response;
 }
 
-export async function apiFetchJson<T>(path: string): Promise<T> {
-    const response = await apiFetch(path);
+export async function apiFetchJson<T>(
+    method: string,
+    path: string,
+    data?: object
+): Promise<T> {
+    const response = await apiFetch(method, path, data);
     return response.json();
 }
