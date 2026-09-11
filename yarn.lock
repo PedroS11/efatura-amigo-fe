@@ -3209,15 +3209,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-basic-ssl@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@vitejs/plugin-basic-ssl@npm:2.3.0"
-  peerDependencies:
-    vite: ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: 10c0/754ebe29a61ac694e665477187f425b7c3b41e30af8d392613250bf65f9b2741e7f5a6ec00a3f88f1a14bfda96e93c6b5e0f75e86357737bc4e92c8dc455c1c0
-  languageName: node
-  linkType: hard
-
 "@vitejs/plugin-react@npm:^6.0.4":
   version: 6.1.0
   resolution: "@vitejs/plugin-react@npm:6.1.0"
@@ -3851,7 +3842,6 @@ __metadata:
     "@types/node": "npm:^24.13.3"
     "@types/react": "npm:^19.2.17"
     "@types/react-dom": "npm:^19.2.3"
-    "@vitejs/plugin-basic-ssl": "npm:^2.3.0"
     "@vitejs/plugin-react": "npm:^6.0.4"
     class-variance-authority: "npm:^0.7.1"
     clsx: "npm:^2.1.1"
