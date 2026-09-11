@@ -79,9 +79,9 @@ export default function ProtectedLayout() {
 
   // If logged in, render the Header, then the specific page content
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Header onLogout={handleLogout} logoutLoading={logoutLoading} name={user!.name} />
-      <main>
+      <main className="flex-1 flex">
         <Outlet />
       </main>
       <Footer />
