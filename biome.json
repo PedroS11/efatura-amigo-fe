@@ -1,0 +1,71 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.13/schema.json",
+  "files": {
+    "includes": ["src/**/*", "worker/**/*", "*.ts", "*.tsx", "*.js", "!dist", "!node_modules"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120
+  },
+  "linter": {
+    "rules": {
+      "preset": "recommended",
+      "complexity": {
+        "noUselessUndefinedInitialization": "off"
+      },
+      "correctness": {
+        "noUnusedImports": { "level": "error", "fix": "safe" },
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useBlockStatements": "off",
+        "useConst": "error",
+        "useImportType": "error",
+        "noCommonJs": "error",
+        "noNamespace": "error",
+        "useSelfClosingElements": "error"
+      },
+      "suspicious": {
+        "noConsole": "off",
+        "noExplicitAny": "error",
+        "noVar": "error",
+        "noArrayIndexKey": "error"
+      },
+      "a11y": {
+        "preset": "recommended"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "none",
+      "arrowParentheses": "asNeeded",
+      "quoteStyle": "double",
+      "jsxQuoteStyle": "double"
+    },
+    "globals": ["exports"]
+  },
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/components/ui/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off"
+          }
+        }
+      }
+    }
+  ],
+  "assist": { "enabled": true }
+}
