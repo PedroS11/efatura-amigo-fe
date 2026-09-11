@@ -19,9 +19,6 @@ import {
     ItemTitle,
 } from "./components/ui/item";
 import { toast } from "sonner";
-import Footer from "./Footer";
-import Header from "./Header";
-import type { User } from "@/lib/api/auth/types.ts";
 import {
     searchCompanies,
     type SearchCompaniesResponse,
@@ -30,14 +27,7 @@ import { getMetadata, type Metadata } from "./lib/api/getMetadata";
 import { ApiAuthError, ApiError } from "./lib/api/apiFetch";
 import { Spinner } from "./components/ui/spinner";
 
-type DashboardProps = {
-    user: User;
-    onLogout: () => void;
-    logoutLoading?: boolean;
-    onSessionExpired: () => void;
-};
-
-function App({ user, onLogout, logoutLoading, onSessionExpired }: DashboardProps) {
+function App() {
     const [query, setQuery] = useState("");
     const [items, setItems] = useState<SearchCompaniesResponse["items"]>([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -47,17 +37,13 @@ function App({ user, onLogout, logoutLoading, onSessionExpired }: DashboardProps
     const [loading, setLoading] = useState(false);
     const [searchPerformed, setSearchPerformed] = useState(false);
 
-    const handleApiAuthError = useCallback(
-        (error: unknown): boolean => {
-            if (error instanceof ApiAuthError) {
-                toast.error("Sessão expirada, por favor login novamente");
-                onSessionExpired();
-                return true;
-            }
-            return false;
-        },
-        [onSessionExpired]
-    );
+    const handleApiAuthError = useCallback((error: unknown): boolean => {
+        if (error instanceof ApiAuthError) {
+            toast.error("Sessão expirada, por favor login novamente");
+            return true;
+        }
+        return false;
+    }, []);
 
     useEffect(() => {
         async function fetchMetadata() {
@@ -132,11 +118,6 @@ function App({ user, onLogout, logoutLoading, onSessionExpired }: DashboardProps
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Header
-                name={user.name ?? user.email}
-                onLogout={onLogout}
-                logoutLoading={logoutLoading}
-            />
             <main className="flex flex-1 items-center justify-center px-4 py-8">
                 <div className="w-full max-w-2xl text-center">
                     <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -293,8 +274,6 @@ function App({ user, onLogout, logoutLoading, onSessionExpired }: DashboardProps
                     )}
                 </div>
             </main>
-
-            <Footer />
         </div>
     );
 }
