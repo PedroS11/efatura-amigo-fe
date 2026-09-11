@@ -101,137 +101,135 @@ function App() {
   const showClear = (query.length > 0 || items.length > 0 || searchPerformed) && !isLoading;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <div className="w-full max-w-2xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Efatura Amigo Dashboard</h1>
+    <div className="flex flex-1 items-center justify-center px-4 py-8">
+      <div className="w-full max-w-2xl text-center">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Efatura Amigo Dashboard</h1>
 
-          {metadataLoading && (
-            <div className="mt-4 flex justify-center">
-              <Spinner className="size-6 text-muted-foreground" />
+        {metadataLoading && (
+          <div className="mt-4 flex justify-center">
+            <Spinner className="size-6 text-muted-foreground" />
+          </div>
+        )}
+
+        {metadata && (
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <Badge variant="secondary">
+                <BadgeCheck />
+                {metadata.companiesTable.itemCount} empresas
+              </Badge>
+              <Badge variant="secondary">
+                <ClipboardCheck />
+                {metadata.unprocessedCompaniesTable.itemCount} empresas por processar
+              </Badge>
             </div>
-          )}
-
-          {metadata && (
-            <div className="mt-4 flex flex-col items-center gap-2">
+            {metadata.nifPt.credits && (
               <div className="flex flex-wrap items-center justify-center gap-2">
-                <Badge variant="secondary">
-                  <BadgeCheck />
-                  {metadata.companiesTable.itemCount} empresas
+                <Badge variant="outline">
+                  <Coins />
+                  Mês: {metadata.nifPt.credits.month}
                 </Badge>
-                <Badge variant="secondary">
-                  <ClipboardCheck />
-                  {metadata.unprocessedCompaniesTable.itemCount} empresas por processar
+                <Badge variant="outline">
+                  <Coins />
+                  Dia: {metadata.nifPt.credits.day}
+                </Badge>
+                <Badge variant="outline">
+                  <Coins />
+                  Hora: {metadata.nifPt.credits.hour}
+                </Badge>
+                <Badge variant="outline">
+                  <Coins />
+                  Minuto: {metadata.nifPt.credits.minute}
                 </Badge>
               </div>
-              {metadata.nifPt.credits && (
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                  <Badge variant="outline">
-                    <Coins />
-                    Mês: {metadata.nifPt.credits.month}
-                  </Badge>
-                  <Badge variant="outline">
-                    <Coins />
-                    Dia: {metadata.nifPt.credits.day}
-                  </Badge>
-                  <Badge variant="outline">
-                    <Coins />
-                    Hora: {metadata.nifPt.credits.hour}
-                  </Badge>
-                  <Badge variant="outline">
-                    <Coins />
-                    Minuto: {metadata.nifPt.credits.minute}
-                  </Badge>
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
+        )}
 
-          <div className="mt-8 flex gap-2">
-            <div className="relative flex-1">
-              <Input
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Procura empresas por NIF"
-                className={`h-12 text-base ${showClear ? "pr-10" : ""}`}
-              />
-              {showClear && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  className="absolute top-1/2 right-1 -translate-y-1/2"
-                  onClick={handleClear}
-                  aria-label="Limpar"
-                >
-                  <X />
-                </Button>
-              )}
-            </div>
-
-            <Button onClick={handleSearch} size="lg" className="h-12 px-5" disabled={isLoading}>
-              <Search />
-              Procurar
-            </Button>
+        <div className="mt-8 flex gap-2">
+          <div className="relative flex-1">
+            <Input
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Procura empresas por NIF"
+              className={`h-12 text-base ${showClear ? "pr-10" : ""}`}
+            />
+            {showClear && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                className="absolute top-1/2 right-1 -translate-y-1/2"
+                onClick={handleClear}
+                aria-label="Limpar"
+              >
+                <X />
+              </Button>
+            )}
           </div>
 
-          {!isLoading && items.length > 0 && (
-            <div className="mt-8 flex flex-col gap-2">
-              {items.map((item, index) => (
-                <Item key={item.nif} variant={`${index % 2 === 0 ? "outline" : "muted"}`}>
-                  <ItemContent>
-                    <ItemTitle>{item.name}</ItemTitle>
-                    <ItemDescription>NIF: {item.nif}</ItemDescription>
-                    {item.category && <ItemDescription>Category: {item.category}</ItemDescription>}
-                  </ItemContent>
-                </Item>
-              ))}
+          <Button onClick={handleSearch} size="lg" className="h-12 px-5" disabled={isLoading}>
+            <Search />
+            Procurar
+          </Button>
+        </div>
 
-              {nrPages > 1 && (
-                <div className="mt-4 flex items-center justify-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 0}
-                  >
-                    <ChevronLeft />
-                    Previous
-                  </Button>
-                  <span className="text-sm text-muted-foreground">
-                    Page {currentPage + 1} of {nrPages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage >= nrPages - 1}
-                  >
-                    Next
-                    <ChevronRight />
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-          {!isLoading && items.length === 0 && searchPerformed && (
-            <div className="mt-8 flex flex-col gap-2">Não foram encontradas empresas com o NIF fornecido</div>
-          )}
-          {isLoading && (
-            <div className="mt-8 flex flex-col gap-2">
-              <Item variant="muted">
-                <ItemMedia>
-                  <Spinner />
-                </ItemMedia>
+        {!isLoading && items.length > 0 && (
+          <div className="mt-8 flex flex-col gap-2">
+            {items.map((item, index) => (
+              <Item key={item.nif} variant={`${index % 2 === 0 ? "outline" : "muted"}`}>
                 <ItemContent>
-                  <ItemTitle className="line-clamp-1">A procurar empresas...</ItemTitle>
+                  <ItemTitle>{item.name}</ItemTitle>
+                  <ItemDescription>NIF: {item.nif}</ItemDescription>
+                  {item.category && <ItemDescription>Category: {item.category}</ItemDescription>}
                 </ItemContent>
               </Item>
-            </div>
-          )}
-        </div>
-      </main>
+            ))}
+
+            {nrPages > 1 && (
+              <div className="mt-4 flex items-center justify-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 0}
+                >
+                  <ChevronLeft />
+                  Previous
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  Page {currentPage + 1} of {nrPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage >= nrPages - 1}
+                >
+                  Next
+                  <ChevronRight />
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+        {!isLoading && items.length === 0 && searchPerformed && (
+          <div className="mt-8 flex flex-col gap-2">Não foram encontradas empresas com o NIF fornecido</div>
+        )}
+        {isLoading && (
+          <div className="mt-8 flex flex-col gap-2">
+            <Item variant="muted">
+              <ItemMedia>
+                <Spinner />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle className="line-clamp-1">A procurar empresas...</ItemTitle>
+              </ItemContent>
+            </Item>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
