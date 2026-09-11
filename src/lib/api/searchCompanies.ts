@@ -12,5 +12,6 @@ export type SearchCompaniesResponse = {
 
 export const searchCompanies = (query: string, page: number) =>
     apiFetchJson<SearchCompaniesResponse>(
+        "GET",
         `/api/search?query=${encodeURIComponent(query)}&page=${page}`
     );
