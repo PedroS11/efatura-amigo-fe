@@ -10,7 +10,7 @@ export type Metadata = {
             hour: number;
             minute: number;
             paid: number;
-        };
+        } | null;
     };
 };
 

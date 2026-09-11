@@ -146,24 +146,26 @@ function App() {
                                     empresas por processar
                                 </Badge>
                             </div>
-                            <div className="flex flex-wrap items-center justify-center gap-2">
-                                <Badge variant="outline">
-                                    <Coins />
-                                    Mês: {metadata.nifPt.credits.month}
-                                </Badge>
-                                <Badge variant="outline">
-                                    <Coins />
-                                    Dia: {metadata.nifPt.credits.day}
-                                </Badge>
-                                <Badge variant="outline">
-                                    <Coins />
-                                    Hora: {metadata.nifPt.credits.hour}
-                                </Badge>
-                                <Badge variant="outline">
-                                    <Coins />
-                                    Minuto: {metadata.nifPt.credits.minute}
-                                </Badge>
-                            </div>
+                            {metadata.nifPt.credits && (
+                                <div className="flex flex-wrap items-center justify-center gap-2">
+                                    <Badge variant="outline">
+                                        <Coins />
+                                        Mês: {metadata.nifPt.credits.month}
+                                    </Badge>
+                                    <Badge variant="outline">
+                                        <Coins />
+                                        Dia: {metadata.nifPt.credits.day}
+                                    </Badge>
+                                    <Badge variant="outline">
+                                        <Coins />
+                                        Hora: {metadata.nifPt.credits.hour}
+                                    </Badge>
+                                    <Badge variant="outline">
+                                        <Coins />
+                                        Minuto: {metadata.nifPt.credits.minute}
+                                    </Badge>
+                                </div>
+                            )}
                         </div>
                     )}
 
