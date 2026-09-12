@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/store";
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "./components/ui/item";
 import { Spinner } from "./components/ui/spinner";
 import { ApiAuthError, ApiError } from "./lib/api/apiFetch";
@@ -19,8 +18,7 @@ function App() {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [metadataLoading, setMetadataLoading] = useState(true);
   const [searchPerformed, setSearchPerformed] = useState(false);
-  const isLoading = useAuth(state => state.isLoading);
-  const setIsLoading = useAuth(state => state.setIsLoading);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const handleApiAuthError = useCallback((error: unknown): boolean => {
     if (error instanceof ApiAuthError) {
@@ -51,7 +49,7 @@ function App() {
     if (!query.trim()) return;
 
     setSearchPerformed(true);
-    setIsLoading(true);
+    setSearchLoading(true);
 
     try {
       const data = await searchCompanies(query, page);
@@ -71,7 +69,7 @@ function App() {
         console.error(error);
       }
     } finally {
-      setIsLoading(false);
+      setSearchLoading(false);
     }
   }
 
@@ -98,7 +96,7 @@ function App() {
     setSearchPerformed(false);
   }
 
-  const showClear = (query.length > 0 || items.length > 0 || searchPerformed) && !isLoading;
+  const showClear = (query.length > 0 || items.length > 0 || searchPerformed) && !searchLoading;
 
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-8">
@@ -169,13 +167,13 @@ function App() {
             )}
           </div>
 
-          <Button onClick={handleSearch} size="lg" className="h-12 px-5" disabled={isLoading}>
+          <Button onClick={handleSearch} size="lg" className="h-12 px-5" disabled={searchLoading}>
             <Search />
             Procurar
           </Button>
         </div>
 
-        {!isLoading && items.length > 0 && (
+        {!searchLoading && items.length > 0 && (
           <div className="mt-8 flex flex-col gap-2">
             {items.map((item, index) => (
               <Item key={item.nif} variant={`${index % 2 === 0 ? "outline" : "muted"}`}>
@@ -214,10 +212,10 @@ function App() {
             )}
           </div>
         )}
-        {!isLoading && items.length === 0 && searchPerformed && (
+        {!searchLoading && items.length === 0 && searchPerformed && (
           <div className="mt-8 flex flex-col gap-2">Não foram encontradas empresas com o NIF fornecido</div>
         )}
-        {isLoading && (
+        {searchLoading && (
           <div className="mt-8 flex flex-col gap-2">
             <Item variant="muted">
               <ItemMedia>
