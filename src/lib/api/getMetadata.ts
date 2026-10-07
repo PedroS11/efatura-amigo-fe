@@ -12,6 +12,7 @@ export type Metadata = {
       paid: number;
     } | null;
   };
+  updateToAlgoliaDLQ: { messagesCount: number };
 };
 
 export const getMetadata = () => apiFetchJson<Metadata>("GET", "/api/metadata");

@@ -1,4 +1,4 @@
-import { BadgeCheck, ChevronLeft, ChevronRight, ClipboardCheck, Coins, Search, X } from "lucide-react";
+import { BadgeCheck, ChevronLeft, ChevronRight, ClipboardCheck, Coins, Search, TriangleAlert, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -119,6 +119,10 @@ function App() {
               <Badge variant="secondary">
                 <ClipboardCheck />
                 {metadata.unprocessedCompaniesTable.itemCount} empresas por processar
+              </Badge>
+              <Badge variant="secondary">
+                <TriangleAlert />
+                {metadata.updateToAlgoliaDLQ.messagesCount} errors a atualizar Algolia
               </Badge>
             </div>
             {metadata.nifPt.credits && (
