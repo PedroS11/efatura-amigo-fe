@@ -15,7 +15,7 @@ name = "API_RATE_LIMITER"
 namespace_id = "1001"
 
   [ratelimits.simple]
-  limit = 100
+  limit = 60
   period = 60
 
 # Session/auth endpoints — tighter cap for login and token validation abuse
