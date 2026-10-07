@@ -35,8 +35,14 @@ function proxyHeaders(request: Request): Headers {
   return headers;
 }
 
-function jsonError(status: number, message: string): Response {
-  return Response.json({ error: message }, { status });
+function jsonError(status: number, message: string, request?: Request): Response {
+  const origin = request?.headers.get("origin") ?? "";
+  const headers: HeadersInit = {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Credentials": "true",
+    Vary: "Origin"
+  };
+  return Response.json({ error: message }, { status, headers });
 }
 
 function getClientIp(request: Request): string {
