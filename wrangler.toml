@@ -1,28 +1,12 @@
 name = "efatura-amigo-fe"
-main = "worker/index.ts"
 compatibility_date = "2024-08-20"
-keep_vars = true
 preview_urls = true
+
+# Manage the custom domain in code (it's probably set in the dashboard today)
+routes = [
+  { pattern = "efatura.pedroosilva.dev", custom_domain = true }
+]
 
 [assets]
 directory = "./dist"
-binding = "ASSETS"
 not_found_handling = "single-page-application"
-
-# ~864k requests/month per IP at 24/7 sustained (AWS API Gateway free tier safety margin)
-[[ratelimits]]
-name = "API_RATE_LIMITER"
-namespace_id = "1001"
-
-  [ratelimits.simple]
-  limit = 60
-  period = 60
-
-# Session/auth endpoints — tighter cap for login and token validation abuse
-[[ratelimits]]
-name = "AUTH_RATE_LIMITER"
-namespace_id = "1002"
-
-  [ratelimits.simple]
-  limit = 5
-  period = 60
