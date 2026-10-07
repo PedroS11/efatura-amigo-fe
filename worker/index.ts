@@ -11,7 +11,15 @@ interface Env {
   AUTH_RATE_LIMITER: RateLimiter;
 }
 
-const PROXY_HEADERS = ["authorization", "content-type", "accept", "cookie"];
+const PROXY_HEADERS = [
+  "authorization",
+  "content-type",
+  "accept",
+  "cookie",
+  "origin",
+  "access-control-request-method",
+  "access-control-request-headers"
+];
 
 const AUTH_SESSION_PATHS = ["/api/auth/me", "/api/auth/login", "/api/auth/logout"];
 
